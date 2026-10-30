@@ -27,8 +27,12 @@ class UserModel (BaseModel):
 
 @app.post("/login")
 async def Login (user: UserModel):
+
+    for i in range(20):
+        if user.nome == r.hget((str(i)),'nome') and user.senha == r.hget((str(i)), 'senha'):
+            return {"Aviso": "Bem-Vindo"}
     return {
-        "nome" : user.nome
+        "Aviso": "Usuario não existe"
     }
 
 @app.post("/adicionar_user_test")
