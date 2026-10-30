@@ -23,4 +23,10 @@ app.add_middleware(
 
 class UserModel (BaseModel):
     nome: str = Field(min_length=2, max_length=24)
-    senha: str = Field(min_length=6, max_digits=32)
+    senha: str = Field(min_length=6, max_length=32)
+
+@app.post("/login")
+async def Login (user: UserModel):
+    return {
+        "nome" : user.nome
+    }
