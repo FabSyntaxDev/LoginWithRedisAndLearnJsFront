@@ -9,7 +9,7 @@
   <body>
     <div class="flex ml-4">
       <h1 class="pr-3">Coloque seu email:</h1>
-      <input />
+      <input id="emailT" />
     </div>
 
     <div class="flex ml-4">
@@ -18,9 +18,16 @@
     </div>
 
     <div class="m-4">
-      <button onclick="entrar" class="w-60 h-10 bg-blue-300">Entrar</button>
+      <button onclick="myFunction()" class="w-60 h-10 bg-blue-300">
+        Entrar
+      </button>
     </div>
 
-    <script></script>
+    <script>
+      function myFunction() {
+        let txtE = document.getElementById("emailT").value;
+        alert(txtE);
+      }
+    </script>
   </body>
 </html>
