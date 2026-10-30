@@ -30,3 +30,12 @@ async def Login (user: UserModel):
     return {
         "nome" : user.nome
     }
+
+@app.post("/adicionar_user_test")
+async def Adicionar_user_test (user: UserModel):
+    r.hset('1', mapping={
+        'nome': user.nome,
+        'senha': user.senha
+    })
+
+    print(r.hget('1', 'nome'))
