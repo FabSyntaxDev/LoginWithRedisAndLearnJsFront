@@ -35,6 +35,8 @@ async def Login (user: UserModel):
         "nome": "Usuario não existe"
     }
 
+
+
 @app.post("/adicionar_user_test")
 async def Adicionar_user_test (user: UserModel):
     r.hset('1', mapping={
