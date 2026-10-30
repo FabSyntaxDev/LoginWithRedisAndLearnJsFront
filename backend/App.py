@@ -5,7 +5,6 @@ import redis
 
 r = redis.Redis(host='localhost', port=6379, decode_responses=True)
 
-
 app = FastAPI();
 
 origins = [
@@ -21,3 +20,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+class UserModel (BaseModel):
+    nome: str
+    senha: str
