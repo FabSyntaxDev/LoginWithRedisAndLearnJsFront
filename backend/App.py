@@ -10,7 +10,7 @@ app = FastAPI();
 origins = [
     "http://localhost",
     "http://localhost:8080",
-    "http://127.0.0.1:5500"
+    "http://127.0.0.1:5501"
 ]
 
 app.add_middleware(
@@ -27,12 +27,12 @@ class UserModel (BaseModel):
 
 @app.post("/login")
 async def Login (user: UserModel):
-    
+
     for i in range(20):
         if user.nome == r.hget((str(i)),'nome') and user.senha == r.hget((str(i)), 'senha'):
-            return {"Aviso": "Bem-Vindo"}
+            return {"nome": "Bem-Vindo"}
     return {
-        "Aviso": "Usuario não existe"
+        "nome": "Usuario não existe"
     }
 
 @app.post("/adicionar_user_test")
