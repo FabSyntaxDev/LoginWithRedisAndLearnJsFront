@@ -22,5 +22,5 @@ app.add_middleware(
 )
 
 class UserModel (BaseModel):
-    nome: str
-    senha: str
+    nome: str = Field(min_length=2, max_length=24)
+    senha: str = Field(min_length=6, max_digits=32)
