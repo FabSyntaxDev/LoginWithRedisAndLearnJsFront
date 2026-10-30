@@ -42,9 +42,11 @@
           .then((dados) => {
             if (dados.nome == "Usuario não existe") {
               console.log("Usuario não existe");
+              alert("Usuario não existe");
             }
             if (dados.nome == "Bem-Vindo") {
               console.log("Seja bem vindo ao sistema " + txtE);
+              alert("Seja bem vindo ao sistema " + txtE);
             }
           });
       }
