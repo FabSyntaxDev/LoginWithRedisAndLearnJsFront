@@ -25,6 +25,11 @@ class UserModel (BaseModel):
     nome: str = Field(min_length=2, max_length=24)
     senha: str = Field(min_length=6, max_length=32)
 
+class CadastrarUserModel (BaseModel):
+    nome: str
+    senha: str
+    idade: int
+
 @app.post("/login")
 async def Login (user: UserModel):
 
@@ -34,6 +39,7 @@ async def Login (user: UserModel):
     return {
         "nome": "Usuario não existe"
     }
+
 
 
 
