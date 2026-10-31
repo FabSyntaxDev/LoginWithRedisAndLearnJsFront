@@ -17,14 +17,17 @@
       <input class="bg-white" id="senhaT" />
     </div>
 
-    <div class="m-4">
-      <button onclick="myFunction()" class="w-60 h-10 bg-blue-300">
+    <div class="m-4 flex">
+      <button onclick="myFunctionLogin()" class="w-60 h-10 m-2 bg-blue-300">
         Entrar
+      </button>
+      <button onclick="myFunctionCadastrar()" class="w-60 h-10 m-2 bg-blue-300">
+        Cadastrar
       </button>
     </div>
 
     <script>
-      function myFunction() {
+      function myFunctionLogin() {
         let txtE = document.getElementById("emailT").value;
         let txtS = document.getElementById("senhaT").value;
 
