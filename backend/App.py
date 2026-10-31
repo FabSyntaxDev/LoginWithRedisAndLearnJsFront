@@ -40,8 +40,29 @@ async def Login (user: UserModel):
         "nome": "Usuario não existe"
     }
 
+@app.post("/adicionar_user")
+async def AdicionarUser(user: CadastrarUserModel):
+    # Geralmente maioridade é >= 18, ajuste se necessário
+    if user.idade >= 18:
+        for i in range(30):
+            # Verifica se o campo 'nome' não existe (retorna None)
+            if r.hget(str(i), 'nome') is None:
+                r.hset(str(i), mapping={
+                    "nome": user.nome,
+                    "senha": user.senha,
+                    "idade": user.idade 
+                })
+                # Retorna imediatamente assim que achar a vaga e cadastrar
+                valor = str(i)
+                dados = r.hgetall(valor)
+                print(f"Dados: {dados} | id: {valor}")
+                return {'nome': "Usuario Cadastrado"}
+        
+        # Caso o loop acabe e nenhum dos 30 slots esteja livre:
+        return {'nome': "Limite de usuários atingido"}
 
-
+    return {'nome': "Menor de idade não pode"}
+            
 
 @app.post("/adicionar_user_test")
 async def Adicionar_user_test (user: UserModel):
