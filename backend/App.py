@@ -26,14 +26,14 @@ class UserModel (BaseModel):
     senha: str = Field(min_length=6, max_length=32)
 
 class CadastrarUserModel (BaseModel):
-    nome: str
-    senha: str
+    nome: str = Field(min_length=2, max_length=24)
+    senha: str = Field(min_length=2, max_length=24)
     idade: int
 
 @app.post("/login")
 async def Login (user: UserModel):
 
-    for i in range(20):
+    for i in range(1000):
         if user.nome == r.hget((str(i)),'nome') and user.senha == r.hget((str(i)), 'senha'):
             return {"nome": "Bem-Vindo"}
     return {
