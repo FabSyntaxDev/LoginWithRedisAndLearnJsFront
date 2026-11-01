@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 import redis
@@ -24,6 +24,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
     )
+
+class UserU (BaseModel):
+    nome: str
+
 
 class UserModel (BaseModel):
     nome: str = Field(min_length=2, max_length=24)
@@ -72,8 +76,20 @@ async def AdicionarUser(user: CadastrarUserModel):
 
 #agora vou adicionar as fotos
 @app.post("/upload")
-async def enviar_foto(foto: UploadFile = File(...)):
-    prefixo = "perfil_"
+async def enviar_foto(user: str = Form(...), foto: UploadFile = File(...)):
+
+    id_encontrado = None
+    for i in range(1000):
+        nome_atual = r.hget(str(i), "nome")
+        if nome_atual == user:
+            id_encontrado = str(i)
+            break  # Achou, pode parar o loop
+
+    if not id_encontrado:
+        return {"erro": "Usuário não encontrado no Redis"}
+
+    # Define o nome personalizado para a foto usando o ID encontrado
+    prefixo = f"perfil_{id_encontrado}_"
     nome_personalizado = f"{prefixo}{foto.filename}"
         
     caminho_salvar = os.path.join("FotosPerfil", nome_personalizado)
@@ -81,8 +97,11 @@ async def enviar_foto(foto: UploadFile = File(...)):
     with open(caminho_salvar, "wb") as arquivo_local:
         shutil.copyfileobj(foto.file, arquivo_local)
             
-    return {"mensagem": f"Foto salva como: {nome_personalizado}"}
-
+    return {
+        "mensagem": "Foto salva com sucesso!", 
+        "usuario_id": id_encontrado,
+        "foto_salva": nome_personalizado
+    }
 
 
 
