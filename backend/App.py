@@ -83,13 +83,12 @@ async def enviar_foto(user: str = Form(...), foto: UploadFile = File(...)):
         nome_atual = r.hget(str(i), "nome")
         if nome_atual == user:
             id_encontrado = str(i)
-            break  # Achou, pode parar o loop
+            break 
 
     if not id_encontrado:
-        return {"erro": "Usuário não encontrado no Redis"}
+        return {"erro": "Usuário não encontrado"}
 
-    # Define o nome personalizado para a foto usando o ID encontrado
-    prefixo = f"perfil_{id_encontrado}_"
+    prefixo = f"{id_encontrado}_"
     nome_personalizado = f"{prefixo}{foto.filename}"
         
     caminho_salvar = os.path.join("FotosPerfil", nome_personalizado)
