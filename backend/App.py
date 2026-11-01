@@ -1,9 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 import redis
+import os
+import shutil
 
 r = redis.Redis(host='localhost', port=6379, decode_responses=True)
+
+os.makedirs("FotosPerfil", exist_ok=True)
 
 app = FastAPI();
 
@@ -11,7 +15,7 @@ origins = [
     "http://localhost",
     "http://localhost:8080",
     "http://127.0.0.1:5501"
-]
+    ]
 
 app.add_middleware(
     CORSMiddleware,
@@ -19,7 +23,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-)
+    )
 
 class UserModel (BaseModel):
     nome: str = Field(min_length=2, max_length=24)
@@ -58,12 +62,32 @@ async def AdicionarUser(user: CadastrarUserModel):
                 "senha": user.senha, 
                 "idade": user.idade 
             })
-            
+                
             dados = r.hgetall(valor)
             print(f"Dados: {dados} | id: {valor}")
             return {"mensagem": "Usuário Cadastrado", "id": valor}
 
     return {"erro": "Limite de usuários atingido"}            
+
+
+#agora vou adicionar as fotos
+@app.post("/upload")
+async def enviar_foto(foto: UploadFile = File(...)):
+    prefixo = "perfil_"
+    nome_personalizado = f"{prefixo}{foto.filename}"
+        
+    caminho_salvar = os.path.join("FotosPerfil", nome_personalizado)
+        
+    with open(caminho_salvar, "wb") as arquivo_local:
+        shutil.copyfileobj(foto.file, arquivo_local)
+            
+    return {"mensagem": f"Foto salva como: {nome_personalizado}"}
+
+
+
+
+
+
 
 @app.post("/adicionar_user_test")
 async def Adicionar_user_test (user: UserModel):
