@@ -12,7 +12,7 @@
 
     <div class="flex ml-4 mt-4">
       <h1 class="pr-3">Coloque seu nome:</h1>
-      <input class="bg-white" id="emailT" />
+      <input class="bg-white" id="nomeT" />
     </div>
 
     <div class="flex ml-4 mt-4">
@@ -22,7 +22,7 @@
 
     <div class="flex ml-4 mt-4">
       <h1 class="pr-3">Qual sua idade:</h1>
-      <input class="bg-white" id="senhaT" />
+      <input class="bg-white" id="idadeT" />
     </div>
 
     <div class="m-4 flex">
@@ -30,7 +30,7 @@
         Já tenho conta
       </button>
 
-      <button onclick="myFunctionLogin()" class="w-60 h-10 m-2 bg-blue-300">
+      <button onclick="myFunctionCadastrar()" class="w-60 h-10 m-2 bg-blue-300">
         Cadastrar
       </button>
     </div>
@@ -38,6 +38,34 @@
     <script>
       function myLogin() {
         window.location.href = "login.html";
+      }
+
+      function myFunctionCadastrar() {
+        let nomeT = document.getElementById("nomeT").value;
+        let senhaT = document.getElementById("senhaT").value;
+        let idadeT = Number(document.getElementById("idadeT").value); // Convertido para número (opcional, dependendo do backend)
+
+        fetch("http://127.0.0.1:8000/adicionar_user", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nome: nomeT,
+            senha: senhaT,
+            idade: idadeT,
+          }),
+        })
+          .then((response) => {
+            if (response.ok) {
+              console.log("Usuário cadastrado com sucesso!");
+            } else {
+              console.error("Erro ao cadastrar usuário.");
+            }
+          })
+          .catch((error) => {
+            console.error("Erro de rede:", error);
+          });
       }
     </script>
   </body>
