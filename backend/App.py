@@ -4,6 +4,9 @@ from fastapi.middleware.cors import CORSMiddleware
 import redis
 import os
 import shutil
+import jwt
+
+SECRET_KEY = "alterarPosteriomente2010"
 
 r = redis.Redis(host='localhost', port=6379, decode_responses=True)
 
@@ -27,7 +30,6 @@ app.add_middleware(
 
 class UserU (BaseModel):
     nome: str
-
 
 class UserModel (BaseModel):
     nome: str = Field(min_length=2, max_length=24)
@@ -66,13 +68,24 @@ async def AdicionarUser(user: CadastrarUserModel):
                 "senha": user.senha, 
                 "idade": user.idade 
             })
-                
+
+            dados_token = {
+                "id": valor
+            }
+
+            token = jwt.encode(dados_token, SECRET_KEY, algorithm="HS256")
+
+            print(f"seu token gerado: {token}")
+
+            token_decode = jwt.decode(token, SECRET_KEY, algorithms="HS256")
+
+            print(f"Token Decodificado: {token_decode}")
+            
             dados = r.hgetall(valor)
             print(f"Dados: {dados} | id: {valor}")
             return {"mensagem": "Usuário Cadastrado", "id": valor}
 
     return {"erro": "Limite de usuários atingido"}            
-
 
 #agora vou adicionar as fotos
 @app.post("/upload")
